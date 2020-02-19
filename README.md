@@ -125,6 +125,11 @@ To run the docker image, which automatically starts the model serving API, run:
 ```bash
 $ docker run -it -p 5000:5000 max-object-detector
 ```
+To run the docker image while capturing host infos
+
+```bash
+$ docker run -it --net="host" --pid="host" max-object-detector
+```
 
 ### 3. Use the Model
 
