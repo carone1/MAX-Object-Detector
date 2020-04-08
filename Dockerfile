@@ -18,7 +18,8 @@ FROM codait/max-base:v1.1.3
 
 RUN apt-get update && apt-get -y install libatlas3-base gcc make zlib1g-dev libbz2-dev libreadline-dev && rm -rf /var/lib/apt/lists/*
 
-ARG model_bucket=https://max.cdn.appdomain.cloud/max-object-detector/1.0.1
+#ARG model_bucket=https://max.cdn.appdomain.cloud/max-object-detector/1.0.1
+ARG model_bucket=https://github.com/carone1/MAX-Object-Detector-Model/raw/master
 ARG model_file=model.tar.gz
 ARG data_file=data.tar.gz
 ARG use_pre_trained_model=true
@@ -31,10 +32,10 @@ RUN if [ "$use_pre_trained_model" = "true" ] ; then\
     wget -nv --show-progress --progress=bar:force:noscroll ${model_bucket}/${data_file} --output-document=assets/${data_file} && \
            tar -x -C assets/ -f assets/${data_file} -v && rm assets/${data_file}; fi
 
-RUN wget -nv --show-progress --progress=bar:force:noscroll https://github.com/carone1/MAX-Object-Detector-Web-App/archive/v1.2.b.tar.gz && \
-  tar -xf v1.2.b.tar.gz && rm v1.2.b.tar.gz
+RUN wget -nv --show-progress --progress=bar:force:noscroll https://github.com/carone1/MAX-Object-Detector-Web-App/archive/v1.2.e.tar.gz && \
+  tar -xf v1.2.e.tar.gz && rm v1.2.e.tar.gz
 
-RUN mv ./MAX-Object-Detector-Web-App-1.2.b/static static
+RUN mv ./MAX-Object-Detector-Web-App-1.2.e/static static
 
 COPY requirements.txt /workspace
 RUN pip install -r requirements.txt
@@ -53,5 +54,5 @@ RUN if [ "$use_pre_trained_model" = "true" ] ; then \
 
 EXPOSE 5000
 
-ENV ENV_APP_NAME=v1.2.b
+ENV ENV_APP_NAME=v1.2.e
 CMD python app.py

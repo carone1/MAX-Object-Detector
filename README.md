@@ -50,7 +50,8 @@ To run the docker image, which automatically starts the model serving API, run:
 
 Intel CPUs:
 ```bash
-$ docker run -it -p 5000:5000 codait/max-object-detector
+$sudo docker run -it -p 5000:5000 --rm -e CLUSTER_NAME=cluster1 -e CLOUD_PROVIDER=onprem -e VERSION=v1.2.e carone1/max-object-detector:v1.2.e
+
 ```
 
 ARM CPUs (eg Raspberry Pi):

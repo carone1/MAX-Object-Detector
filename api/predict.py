@@ -69,30 +69,30 @@ label_prediction = MAX_API.model('LabelPrediction', {
                                                                           ') in the form [ymin, xmin, ymax, xmax].')
 })
 
-label_interfaces_network = MAX_API.model('NetworkInterfaces', {
-    'interface': fields.String(required=False, description='Network Interface Name'),
-    'link_layer': fields.String(required=False, description='Link Layer Interface'),
-    'ip': fields.String(required=False, description='Normal Internet Addresses'),
-    'ipv6': fields.String(required=False, description='Internet Addresses Version 6')
-})
+#label_interfaces_network = MAX_API.model('NetworkInterfaces', {
+#    'interface': fields.String(required=False, description='Network Interface Name'),
+#    'link_layer': fields.String(required=False, description='Link Layer Interface'),
+#    'ip': fields.String(required=False, description='Normal Internet Addresses'),
+#    'ipv6': fields.String(required=False, description='Internet Addresses Version 6')
+#})
 
 environment_variables = MAX_API.model('EnvironmentVariables', {
     'name': fields.String(required=False, description='Environemnt variable name'),
     'value': fields.String(required=False, description='Environment variable value')
 })
 
-environment_network = MAX_API.model('EnvironmentNetwork', {
-    'host': fields.String(required=False, description='Server hostname'),
-    'interfaces_network': fields.List(fields.Nested(label_interfaces_network), description='Server Network Interfaces')
-})
+#environment_network = MAX_API.model('EnvironmentNetwork', {
+#    'host': fields.String(required=False, description='Server hostname'),
+#    'interfaces_network': fields.List(fields.Nested(label_interfaces_network), description='Server Network Interfaces')
+#})
 
 predict_response = MAX_API.model('ModelPredictResponse', {
     'status': fields.String(required=True, description='Response status message'),
     'predictions': fields.List(fields.Nested(label_prediction),
                                description='Predicted class labels, probabilities and bounding box for each detected '
                                            'object'),
-    'environment_variables': fields.List(fields.Nested(environment_variables), description='Environment Variables'),
-    'environment_network': fields.Nested(environment_network)
+    'environment_variables': fields.List(fields.Nested(environment_variables), description='Environment Variables')
+    #'environment_network': fields.Nested(environment_network)
 })
 
 
@@ -116,19 +116,22 @@ class ModelPredictAPI(PredictAPI):
 
         environment_variables = []
         environment_network = {}
-        environment_network['host'] = socket.gethostname()
-        interfaces_networks = []
+        #environment_network['host'] = socket.gethostname()
+        #interfaces_networks = []
 
-        for key in ni.interfaces():
-            interface_network = {'interface':'{}'.format(key), 'link_layer':'{}'.format(ni.ifaddresses(key)[ni.AF_LINK]) , \
-                    'ip':'{}'.format(ni.ifaddresses(key)[ni.AF_INET]), 'ipv6':'{}'.format(ni.ifaddresses(key)[ni.AF_INET6])}
-            interfaces_networks.append(interface_network)
-        environment_network['interfaces_network'] = interfaces_networks
-        result['environment_network'] = environment_network
+        #for key in ni.interfaces():
+        #    interface_network = {'interface':'{}'.format(key), 'link_layer':'{}'.format(ni.ifaddresses(key)[ni.AF_LINK]) , \
+        #            'ip':'{}'.format(ni.ifaddresses(key)[ni.AF_INET]), 'ipv6':'{}'.format(ni.ifaddresses(key)[ni.AF_INET6])}
+        #    interfaces_networks.append(interface_network)
+        #environment_network['interfaces_network'] = interfaces_networks
+        #result['environment_network'] = environment_network
 
         for k, v in os.environ.items():
-            environment_variable = {'name':k, 'value':v}
-            environment_variables.append(environment_variable)
-        environment_variables.append({'name':'PLATFORM_DISTRIBUTION', 'value':platform.platform()})
+            # only display certain env variable
+            if "CLUSTER_NAME" in k or "CLOUD_PROVIDER" in k or "VERSION" in k :
+                k = str(" " + k )
+                environment_variable = {'name':k, 'value':v}
+                environment_variables.append(environment_variable)
+        #environment_variables.append({'name':'PLATFORM_DISTRIBUTION', 'value':platform.platform()})
         result['environment_variables'] = environment_variables
         return result
