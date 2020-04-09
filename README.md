@@ -50,7 +50,7 @@ To run the docker image, which automatically starts the model serving API, run:
 
 Intel CPUs:
 ```bash
-$sudo docker run -it -p 5000:5000 --rm -e CLUSTER_NAME=cluster1 -e CLOUD_PROVIDER=onprem -e VERSION=v1.2.e carone1/max-object-detector:v1.2.e
+$sudo docker run -it -p 5000:5000 --rm -e CLUSTER_NAME=cluster-1 -e CLOUD_PROVIDER=on-prem -e VERSION=v1.2.e -e LOG_PREDICTIONS=TRUE -e LOG_PREDICTION_FILE=/tmp/on-prem-cluster-1-predictions.log -v /tmp:/tmp carone1/max-object-detector:on-prem-cluster-1
 
 ```
 
